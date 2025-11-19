@@ -1,0 +1,77 @@
+classDiagram
+    class Estudiante {
+        -id: int
+        -nombre: string
+        -email: string
+        -carrera: string
+        +registrar(): void
+        +editarPerfil(): void
+        +consultarCursosDisponibles(): List<Curso>
+        +consultarCursosMatriculados(): List<Curso>
+    }
+ 
+    class Curso {
+        -codigo: string
+        -nombre: string
+        -creditos: int
+        +matricular(): void
+        +retirar(): void
+    }
+
+    class Periodo {
+        -año: int
+        -nombre: string
+        -activo: boolean
+        +iniciarPeriodo(): void
+        +finalizarPeriodo(): void
+    }
+ 
+    class PeriodoAcademico {
+    -id: int
+    -idCurso: int
+    -idPeriodo: int
+    -idProfesor: int
+    -horario: string
+    -creditos: int
+    -cupos_disponibles: int
+    
+    +asignarProfesor(): void
+    +definirHorario(): void
+    +consultarCupos(): int
+    +crearGrupo(): void
+    }
+
+    class Profesor {
+        -id: int
+        -nombre: string
+        -email: string
+        +asignarCurso(): void
+        +editarPerfil(): void
+    }
+
+    class Matricula {
+        -id: int 
+        -idEstudiante: int
+        -idGrupo: int
+        -fecha: date
+    }
+
+    class Grupo {
+    -id_grupo: int
+    -idCurso: int
+    -idProfesor: int?
+    -idPeriodo: int
+    -capacidad: int
+    -numero_grupo: int
+    -horario: string
+    +agregarEstudiante(): void
+    +consultarEstudiantes(): List<Estudiante>
+    }
+
+Periodo "1" -- "*" PeriodoAcademico : "se_ofertan_en"
+Curso "1" -- "*" PeriodoAcademico : "se_dicta_como"
+Profesor "1" -- "*" PeriodoAcademico : "imparte"
+PeriodoAcademico "1" -- "*"Grupo : "tiene"
+Grupo "1" -- "*" Matricula : "contiene"
+Estudiante "1" -- "*" Matricula : "realiza"
+    
