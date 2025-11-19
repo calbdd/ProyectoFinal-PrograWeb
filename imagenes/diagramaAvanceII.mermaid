@@ -1,0 +1,74 @@
+classDiagram
+    class Estudiante {
+        -idEstudiante: String
+        -nombre: String
+        -apellido: String
+        -cedula: String
+        -email: String
+        -telefono: String
+        -fechaNacimiento: Date
+        -genero: String
+        -direccion: String
+        +registrar()
+        +actualizar()
+        +eliminar()
+        +obtenerPerfil()
+    }
+
+    class Profesor {
+        -idProfesor: String
+        -nombre: String
+        -apellido: String
+        -cedula: String
+        -email: String
+        -telefono: String
+        -especializacion: String
+        -departamento: String
+        +registrar()
+        +actualizar()
+        +eliminar()
+        +asignarCurso()
+    }
+
+    class Curso {
+        -codigoCurso: String
+        -nombre: String
+        -descripcion: String
+        -creditos: Integer
+        -horario: String
+        -capacidad: Integer
+        -estado: String
+        +crear()
+        +actualizar()
+        +eliminar()
+        +obtenerDetalles()
+    }
+
+    class Matricula {
+        -idMatricula: String
+        -fechaMatricula: Date
+        -estado: String
+        -calificacion: Float
+        +registrar()
+        +actualizar()
+        +cancelar()
+        +obtenerCalificacion()
+    }
+
+    class PeriodoAcademico {
+        -idPeriodo: String
+        -nombre: String
+        -fechaInicio: Date
+        -fechaFin: Date
+        -estado: String
+        +crear()
+        +actualizar()
+        +finalizar()
+        +obtenerCursos()
+    }
+
+    Estudiante "1" -- "*" Matricula : realiza
+    Profesor "1" -- "*" Curso : imparte
+    Curso "1" -- "*" Matricula : contiene
+    Curso "*" -- "1" PeriodoAcademico : pertenece
+    Estudiante "*" -- "1" PeriodoAcademico : inscrito en
