@@ -4,137 +4,174 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Académico - Cursos</title>
-    <link rel="stylesheet" href="estilos.css">
+    <!-- Adding Bootstrap CSS link -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/estilos.css">
 </head>
 <body>
-    <header>
-        <h1>Sistema Académico</h1>
-    </header>
-
-    <nav>
-        <div>
-            <a href="estudiantes.html">Estudiantes</a>
-            <a href="cursos.html" class="activo">Cursos</a>
-            <a href="profesores.html">Profesores</a>
+    <!-- Using Bootstrap navbar component -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../index.html">Sistema Académico</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="estudiantes.html">Estudiantes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="cursos.html">Cursos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profesores.html">Profesores</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <a href="index.html">Cerrar Sesión</a>
     </nav>
 
-    <main>
-        <h2>Gestión de Cursos</h2>
+    <!-- Using Bootstrap container and main content layout -->
+    <main class="container py-5">
+        <h1 class="mb-4">Gestión de Cursos</h1>
 
-        <div class="formulario-contenedor">
-            <h3>Agregar Nuevo Curso</h3>
-            <!-- Agregando validaciones HTML5 robustas -->
-            <form>
-                <div class="fila-formulario">
-                    <div class="grupo-formulario">
-                        <label for="codigo_curso">Código del Curso *</label>
-                        <input 
-                            type="text" 
-                            id="codigo_curso" 
-                            name="codigo_curso" 
-                            pattern="^[A-Z]{2,4}\d{3}$"
-                            placeholder="Ej: CS101"
-                            required
-                            title="Formato: 2-4 letras mayúsculas seguidas de 3 dígitos"
-                        >
+        <!-- Restructured form using Bootstrap form classes -->
+        <div class="card mb-5 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Agregar Nuevo Curso</h5>
+            </div>
+            <div class="card-body">
+                <form class="needs-validation" novalidate>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="codigo_curso" class="form-label">Código del Curso <span class="text-danger">*</span></label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="codigo_curso" 
+                                name="codigo_curso" 
+                                pattern="^[A-Z]{2,4}\d{3}$"
+                                placeholder="Ej: CS101"
+                                required
+                            >
+                            <div class="invalid-feedback">Formato: 2-4 letras mayúsculas + 3 dígitos.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="nombre_curso" class="form-label">Nombre del Curso <span class="text-danger">*</span></label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="nombre_curso" 
+                                name="nombre_curso" 
+                                minlength="5"
+                                maxlength="60"
+                                placeholder="Ej: Introducción a la Programación"
+                                required
+                            >
+                            <div class="invalid-feedback">El nombre debe tener entre 5 y 60 caracteres.</div>
+                        </div>
                     </div>
-                    <div class="grupo-formulario">
-                        <label for="nombre_curso">Nombre del Curso *</label>
-                        <input 
-                            type="text" 
-                            id="nombre_curso" 
-                            name="nombre_curso" 
-                            minlength="5"
-                            maxlength="60"
-                            placeholder="Ej: Introducción a la Programación"
-                            required
-                        >
-                    </div>
-                </div>
 
-                <div class="fila-formulario">
-                    <div class="grupo-formulario">
-                        <label for="creditos_curso">Créditos *</label>
-                        <input 
-                            type="number" 
-                            id="creditos_curso" 
-                            name="creditos_curso" 
-                            min="1"
-                            max="6"
-                            placeholder="Ej: 4"
-                            required
-                            title="Los créditos deben estar entre 1 y 6"
-                        >
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="creditos_curso" class="form-label">Créditos <span class="text-danger">*</span></label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                id="creditos_curso" 
+                                name="creditos_curso" 
+                                min="1"
+                                max="6"
+                                placeholder="Ej: 4"
+                                required
+                            >
+                            <div class="invalid-feedback">Los créditos deben estar entre 1 y 6.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="horario_curso" class="form-label">Horario <span class="text-danger">*</span></label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="horario_curso" 
+                                name="horario_curso" 
+                                placeholder="Ej: Lun-Mié 8:00-10:00"
+                                minlength="5"
+                                maxlength="30"
+                                required
+                            >
+                            <div class="invalid-feedback">El horario es requerido.</div>
+                        </div>
                     </div>
-                    <div class="grupo-formulario">
-                        <label for="horario_curso">Horario *</label>
-                        <input 
-                            type="text" 
-                            id="horario_curso" 
-                            name="horario_curso" 
-                            placeholder="Ej: Lun-Mié 8:00-10:00"
-                            minlength="5"
-                            maxlength="30"
-                            required
-                        >
-                    </div>
-                </div>
 
-                <div class="botones-formulario">
-                    <button type="submit" class="btn-enviar">Agregar Curso</button>
-                    <button type="reset" class="btn-limpiar">Limpiar</button>
-                </div>
-            </form>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" class="btn btn-primary">Agregar Curso</button>
+                        <button type="reset" class="btn btn-secondary">Limpiar</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>Nombre</th>
-                    <th>Créditos</th>
-                    <th>Horario</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>CS101</td>
-                    <td>Introducción a la Programación</td>
-                    <td>4</td>
-                    <td>Lun-Mié 8:00-10:00</td>
-                </tr>
-                <tr>
-                    <td>CS201</td>
-                    <td>Estructuras de Datos</td>
-                    <td>4</td>
-                    <td>Mar-Jue 10:00-12:00</td>
-                </tr>
-                <tr>
-                    <td>MAT101</td>
-                    <td>Cálculo Diferencial</td>
-                    <td>5</td>
-                    <td>Lun-Mié-Vie 7:00-9:00</td>
-                </tr>
-                <tr>
-                    <td>ADM201</td>
-                    <td>Gestión Empresarial</td>
-                    <td>3</td>
-                    <td>Mar-Jue 14:00-16:00</td>
-                </tr>
-                <tr>
-                    <td>PSI101</td>
-                    <td>Psicología General</td>
-                    <td>3</td>
-                    <td>Lun-Mié 16:00-18:00</td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- Using Bootstrap table with responsive wrapper -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Listado de Cursos</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Créditos</th>
+                            <th>Horario</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CS101</td>
+                            <td>Introducción a la Programación</td>
+                            <td>4</td>
+                            <td>Lun-Mié 8:00-10:00</td>
+                        </tr>
+                        <tr>
+                            <td>CS201</td>
+                            <td>Estructuras de Datos</td>
+                            <td>4</td>
+                            <td>Mar-Jue 10:00-12:00</td>
+                        </tr>
+                        <tr>
+                            <td>MAT101</td>
+                            <td>Cálculo Diferencial</td>
+                            <td>5</td>
+                            <td>Lun-Mié-Vie 7:00-9:00</td>
+                        </tr>
+                        <tr>
+                            <td>ADM201</td>
+                            <td>Gestión Empresarial</td>
+                            <td>3</td>
+                            <td>Mar-Jue 14:00-16:00</td>
+                        </tr>
+                        <tr>
+                            <td>PSI101</td>
+                            <td>Psicología General</td>
+                            <td>3</td>
+                            <td>Lun-Mié 16:00-18:00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </main>
 
-    <footer>
-        <p>&copy; 2025 Sistema Académico. Todos los derechos reservados.</p>
+    <!-- Adding Bootstrap footer -->
+    <footer class="bg-light text-center py-3 mt-5">
+        <p class="mb-0">&copy; 2025 Sistema Académico. Todos los derechos reservados.</p>
     </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
