@@ -4,68 +4,137 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Académico - Cursos</title>
+    <link rel="stylesheet" href="estilos.css">
 </head>
-<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background: #f0f0f0;">
-    
-    <header style="background: white; border-bottom: 2px solid #ccc; padding: 15px 20px;">
-        <h1 style="margin: 0; color: #333;">Sistema Académico Universidad Central</h1>
+<body>
+    <header>
+        <h1>Sistema Académico</h1>
     </header>
 
-    <nav style="background: #0066cc; padding: 10px 20px;">
-        <a href="estudiantes.html" style="color: white; text-decoration: none; margin-right: 20px;">Estudiantes</a>
-        <a href="cursos.html" style="color: white; text-decoration: none; margin-right: 20px; font-weight: bold;">Cursos</a>
-        <a href="profesores.html" style="color: white; text-decoration: none; margin-right: 20px;">Profesores</a>
-        <a href="../index.html" style="color: white; text-decoration: none; float: right;">Cerrar Sesión</a>
+    <nav>
+        <div>
+            <a href="estudiantes.html">Estudiantes</a>
+            <a href="cursos.html" class="activo">Cursos</a>
+            <a href="profesores.html">Profesores</a>
+        </div>
+        <a href="index.html">Cerrar Sesión</a>
     </nav>
 
-    <main style="padding: 20px;">
-        
-        <h2 style="color: #333;">Cursos</h2>
+    <main>
+        <h2>Gestión de Cursos</h2>
 
-        <table style="width: 100%; background: white; border-collapse: collapse; border: 1px solid #ccc;">
+        <div class="formulario-contenedor">
+            <h3>Agregar Nuevo Curso</h3>
+            <!-- Agregando validaciones HTML5 robustas -->
+            <form>
+                <div class="fila-formulario">
+                    <div class="grupo-formulario">
+                        <label for="codigo_curso">Código del Curso *</label>
+                        <input 
+                            type="text" 
+                            id="codigo_curso" 
+                            name="codigo_curso" 
+                            pattern="^[A-Z]{2,4}\d{3}$"
+                            placeholder="Ej: CS101"
+                            required
+                            title="Formato: 2-4 letras mayúsculas seguidas de 3 dígitos"
+                        >
+                    </div>
+                    <div class="grupo-formulario">
+                        <label for="nombre_curso">Nombre del Curso *</label>
+                        <input 
+                            type="text" 
+                            id="nombre_curso" 
+                            name="nombre_curso" 
+                            minlength="5"
+                            maxlength="60"
+                            placeholder="Ej: Introducción a la Programación"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="fila-formulario">
+                    <div class="grupo-formulario">
+                        <label for="creditos_curso">Créditos *</label>
+                        <input 
+                            type="number" 
+                            id="creditos_curso" 
+                            name="creditos_curso" 
+                            min="1"
+                            max="6"
+                            placeholder="Ej: 4"
+                            required
+                            title="Los créditos deben estar entre 1 y 6"
+                        >
+                    </div>
+                    <div class="grupo-formulario">
+                        <label for="horario_curso">Horario *</label>
+                        <input 
+                            type="text" 
+                            id="horario_curso" 
+                            name="horario_curso" 
+                            placeholder="Ej: Lun-Mié 8:00-10:00"
+                            minlength="5"
+                            maxlength="30"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="botones-formulario">
+                    <button type="submit" class="btn-enviar">Agregar Curso</button>
+                    <button type="reset" class="btn-limpiar">Limpiar</button>
+                </div>
+            </form>
+        </div>
+
+        <table>
             <thead>
-                <tr style="background: #e0e0e0;">
-                    <th style="padding: 10px; text-align: left; border: 1px solid #ccc;">Código</th>
-                    <th style="padding: 10px; text-align: left; border: 1px solid #ccc;">Nombre</th>
-                    <th style="padding: 10px; text-align: left; border: 1px solid #ccc;">Créditos</th>
-                    <th style="padding: 10px; text-align: left; border: 1px solid #ccc;">Horario</th>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Créditos</th>
+                    <th>Horario</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td style="padding: 10px; border: 1px solid #ccc;">CS101</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">Introducción a la Programación</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">4</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">Lun-Mié 8:00-10:00</td>
+                    <td>CS101</td>
+                    <td>Introducción a la Programación</td>
+                    <td>4</td>
+                    <td>Lun-Mié 8:00-10:00</td>
                 </tr>
                 <tr>
-                    <td style="padding: 10px; border: 1px solid #ccc;">CS201</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">Estructuras de Datos</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">4</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">Mar-Jue 10:00-12:00</td>
+                    <td>CS201</td>
+                    <td>Estructuras de Datos</td>
+                    <td>4</td>
+                    <td>Mar-Jue 10:00-12:00</td>
                 </tr>
                 <tr>
-                    <td style="padding: 10px; border: 1px solid #ccc;">MAT101</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">Cálculo Diferencial</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">5</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">Lun-Mié-Vie 7:00-9:00</td>
+                    <td>MAT101</td>
+                    <td>Cálculo Diferencial</td>
+                    <td>5</td>
+                    <td>Lun-Mié-Vie 7:00-9:00</td>
                 </tr>
                 <tr>
-                    <td style="padding: 10px; border: 1px solid #ccc;">ADM201</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">Gestión Empresarial</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">3</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">Mar-Jue 14:00-16:00</td>
+                    <td>ADM201</td>
+                    <td>Gestión Empresarial</td>
+                    <td>3</td>
+                    <td>Mar-Jue 14:00-16:00</td>
                 </tr>
                 <tr>
-                    <td style="padding: 10px; border: 1px solid #ccc;">PSI101</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">Psicología General</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">3</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">Lun-Mié 16:00-18:00</td>
+                    <td>PSI101</td>
+                    <td>Psicología General</td>
+                    <td>3</td>
+                    <td>Lun-Mié 16:00-18:00</td>
                 </tr>
             </tbody>
         </table>
-
     </main>
 
+    <footer>
+        <p>&copy; 2025 Sistema Académico. Todos los derechos reservados.</p>
+    </footer>
 </body>
 </html>
