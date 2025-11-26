@@ -8,169 +8,117 @@
     <link rel="stylesheet" href="../css/estilos.css">
 </head>
 <body>
-    <!-- Using Bootstrap navbar component -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <header class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="../index.html">Sistema Académico</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="estudiantes.html">Estudiantes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="cursos.html">Cursos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="profesores.html">Profesores</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../index.html">Cerrar Sesión</a>
-                    </li>
+            <span class="navbar-brand mb-0 h1">Sistema Académico</span>
+            <nav>
+                <ul class="nav">
+                    <li class="nav-item"><a class="nav-link" href="estudiantes.html">Estudiantes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="cursos.html">Cursos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="profesores.html">Profesores</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Cerrar Sesión</a></li>
                 </ul>
-            </div>
+            </nav>
         </div>
-    </nav>
+    </header>
 
-    <!-- Using Bootstrap container and main content layout -->
-    <main class="container py-5">
-        <h1 class="mb-4">Gestión de Cursos</h1>
+    <main class="container mt-5 mb-5">
+        <!-- Título de la página -->
+        <h2 class="mb-4">Gestión de Cursos</h2>
 
-        <!-- Restructured form using Bootstrap form classes -->
-        <div class="card mb-5 shadow-sm">
+        <!-- FORMULARIO PARA AGREGAR CURSO -->
+        <div class="card mb-4">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Agregar Nuevo Curso</h5>
+                <h3 class="mb-0">Agregar Nuevo Curso</h3>
             </div>
             <div class="card-body">
-                <form class="needs-validation" novalidate>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="codigo_curso" class="form-label">Código del Curso <span class="text-danger">*</span></label>
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                id="codigo_curso" 
-                                name="codigo_curso" 
-                                pattern="^[A-Z]{2,4}\d{3}$"
-                                placeholder="Ej: CS101"
-                                required
-                            >
-                            <div class="invalid-feedback">Formato: 2-4 letras mayúsculas + 3 dígitos.</div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="nombre_curso" class="form-label">Nombre del Curso <span class="text-danger">*</span></label>
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                id="nombre_curso" 
-                                name="nombre_curso" 
-                                minlength="5"
-                                maxlength="60"
-                                placeholder="Ej: Introducción a la Programación"
-                                required
-                            >
-                            <div class="invalid-feedback">El nombre debe tener entre 5 y 60 caracteres.</div>
-                        </div>
+                <!-- Agregado id="formCurso" para manipulación con JavaScript -->
+                <form id="formCurso" novalidate>
+                    <!-- Código del Curso -->
+                    <div class="mb-3">
+                        <label for="codigoCurso" class="form-label">Código del Curso *</label>
+                        <input type="text" class="form-control" id="codigoCurso" 
+                               placeholder="Ej: CS101" required 
+                               pattern="[A-Z]{2,4}\d{3}" title="Formato: 2-4 letras mayúsculas + 3 dígitos">
+                        <small class="form-text text-muted">Formato: 2-4 letras mayúsculas + 3 dígitos.</small>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="creditos_curso" class="form-label">Créditos <span class="text-danger">*</span></label>
-                            <input 
-                                type="number" 
-                                class="form-control" 
-                                id="creditos_curso" 
-                                name="creditos_curso" 
-                                min="1"
-                                max="6"
-                                placeholder="Ej: 4"
-                                required
-                            >
-                            <div class="invalid-feedback">Los créditos deben estar entre 1 y 6.</div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="horario_curso" class="form-label">Horario <span class="text-danger">*</span></label>
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                id="horario_curso" 
-                                name="horario_curso" 
-                                placeholder="Ej: Lun-Mié 8:00-10:00"
-                                minlength="5"
-                                maxlength="30"
-                                required
-                            >
-                            <div class="invalid-feedback">El horario es requerido.</div>
-                        </div>
+                    <!-- Nombre del Curso -->
+                    <div class="mb-3">
+                        <label for="nombreCurso" class="form-label">Nombre del Curso *</label>
+                        <input type="text" class="form-control" id="nombreCurso" 
+                               placeholder="Ej: Introducción a la Programación" required 
+                               minlength="5" maxlength="60" 
+                               title="El nombre debe tener entre 5 y 60 caracteres">
+                        <small class="form-text text-muted">El nombre debe tener entre 5 y 60 caracteres.</small>
                     </div>
 
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button type="submit" class="btn btn-primary">Agregar Curso</button>
-                        <button type="reset" class="btn btn-secondary">Limpiar</button>
+                    <!-- Créditos -->
+                    <div class="mb-3">
+                        <label for="creditosCurso" class="form-label">Créditos *</label>
+                        <input type="number" class="form-control" id="creditosCurso" 
+                               placeholder="Ej: 4" required 
+                               min="1" max="6" title="Los créditos deben estar entre 1 y 6">
+                        <small class="form-text text-muted">Los créditos deben estar entre 1 y 6.</small>
                     </div>
+
+                    <!-- Horario -->
+                    <div class="mb-3">
+                        <label for="horarioCurso" class="form-label">Horario *</label>
+                        <input type="text" class="form-control" id="horarioCurso" 
+                               placeholder="Ej: Lun-Mié 8:00-10:00" required 
+                               title="El horario es requerido">
+                        <small class="form-text text-muted">El horario es requerido.</small>
+                    </div>
+
+                    <!-- Botones -->
+                    <!-- Agregado id="btnAgregarCurso" al botón de envío -->
+                    <button type="submit" class="btn btn-primary" id="btnAgregarCurso">Agregar Curso</button>
+                    <button type="reset" class="btn btn-secondary">Limpiar</button>
                 </form>
             </div>
         </div>
 
-        <!-- Using Bootstrap table with responsive wrapper -->
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Listado de Cursos</h5>
+        <!-- TABLA DE CURSOS DESDE SUPABASE -->
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">Listado de Cursos</h3>
             </div>
-            <div class="table-responsive">
-                <table class="table table-striped table-hover mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Código</th>
-                            <th>Nombre</th>
-                            <th>Créditos</th>
-                            <th>Horario</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>CS101</td>
-                            <td>Introducción a la Programación</td>
-                            <td>4</td>
-                            <td>Lun-Mié 8:00-10:00</td>
-                        </tr>
-                        <tr>
-                            <td>CS201</td>
-                            <td>Estructuras de Datos</td>
-                            <td>4</td>
-                            <td>Mar-Jue 10:00-12:00</td>
-                        </tr>
-                        <tr>
-                            <td>MAT101</td>
-                            <td>Cálculo Diferencial</td>
-                            <td>5</td>
-                            <td>Lun-Mié-Vie 7:00-9:00</td>
-                        </tr>
-                        <tr>
-                            <td>ADM201</td>
-                            <td>Gestión Empresarial</td>
-                            <td>3</td>
-                            <td>Mar-Jue 14:00-16:00</td>
-                        </tr>
-                        <tr>
-                            <td>PSI101</td>
-                            <td>Psicología General</td>
-                            <td>3</td>
-                            <td>Lun-Mié 16:00-18:00</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Código</th>
+                                <th>Nombre</th>
+                                <th>Créditos</th>
+                                <th>Horario</th>
+                            </tr>
+                        </thead>
+                        <!-- Agregado id="tablaCursos" al tbody para que JavaScript lo pueda manipular -->
+                        <tbody id="tablaCursos">
+                            <!-- Los datos se cargarán aquí automáticamente desde Supabase -->
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">Cargando datos...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
 
-    <!-- Adding Bootstrap footer -->
-    <footer class="bg-light text-center py-3 mt-5">
-        <p class="mb-0">&copy; 2025 Sistema Académico. Todos los derechos reservados.</p>
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <p>&copy; 2025 Sistema Académico. Todos los derechos reservados.</p>
     </footer>
 
+    <!-- Scripts de Bootstrap -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Agregados scripts de Supabase -->
+    <script type="module" src="../js/supabaseClient.js"></script>
+    <script type="module" src="../js/cursos.js"></script>
+    <!-- Agregar script de Supabase que carga datos de la tabla cursos -->
+    <script type="module" src="../js/app.js"></script>
 </body>
 </html>
