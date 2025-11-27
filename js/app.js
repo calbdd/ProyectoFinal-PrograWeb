@@ -1,31 +1,16 @@
-// =============================================================================
-// ARCHIVO: js/app.js
-// PROPÓSITO: Manejar CRUD completo (Create, Read, Delete) para:
-//            - Estudiantes
-//            - Cursos
-//            - Profesores
-// BASADO EN: Lab08 - Conexión con Supabase
-// =============================================================================
 
-// Importar el cliente de Supabase configurado
 import { supabase } from "./supabaseClient.js"
 
-// =============================================================================
 // DETECTAR EN QUÉ PÁGINA ESTAMOS
-// =============================================================================
 // Obtenemos la ruta de la página actual (ejemplo: "/paginas/estudiantes.html")
 const paginaActual = window.location.pathname
 
-// =============================================================================
 // MÓDULO 1: ESTUDIANTES
-// =============================================================================
 // Este código SOLO se ejecuta si estamos en la página estudiantes.html
 
 if (paginaActual.includes('estudiantes.html')) {
     
-    // ---------------------------------------------------------------------
     // 1.1 OBTENER ELEMENTOS DEL DOM (Document Object Model)
-    // ---------------------------------------------------------------------
     // Guardamos referencias a los elementos HTML que vamos a manipular
     
     const formEstudiante = document.getElementById("form-estudiante")
@@ -36,14 +21,10 @@ if (paginaActual.includes('estudiantes.html')) {
     const tablaEstudiantes = document.querySelector("#tabla-estudiantes tbody")
     const statusDiv = document.getElementById("status")
 
-    // ---------------------------------------------------------------------
     // 1.2 CARGAR ESTUDIANTES AL INICIAR LA PÁGINA
-    // ---------------------------------------------------------------------
     cargarEstudiantes()
 
-    // ---------------------------------------------------------------------
     // 1.3 EVENTO: ENVIAR FORMULARIO (CREAR ESTUDIANTE)
-    // ---------------------------------------------------------------------
     formEstudiante.addEventListener("submit", async (e) => {
         // Prevenir que el formulario recargue la página (comportamiento por defecto)
         e.preventDefault()
@@ -61,7 +42,6 @@ if (paginaActual.includes('estudiantes.html')) {
         formEstudiante.reset()
     })
 
-    // ---------------------------------------------------------------------
     // FUNCIÓN: CARGAR ESTUDIANTES (READ)
     // ---------------------------------------------------------------------
     /**
@@ -125,9 +105,7 @@ if (paginaActual.includes('estudiantes.html')) {
         }
     }
 
-    // ---------------------------------------------------------------------
     // FUNCIÓN: CREAR ESTUDIANTE (CREATE)
-    // ---------------------------------------------------------------------
     /**
      * Inserta un nuevo estudiante en la base de datos
      * @param {string} id_estudiante - ID del estudiante (ej: "2021001")
@@ -158,9 +136,7 @@ if (paginaActual.includes('estudiantes.html')) {
         }
     }
 
-    // ---------------------------------------------------------------------
     // FUNCIÓN: ELIMINAR ESTUDIANTE (DELETE)
-    // ---------------------------------------------------------------------
     /**
      * Elimina un estudiante de la base de datos
      * @param {number} id - ID interno de Supabase (no el id_estudiante)
@@ -189,9 +165,7 @@ if (paginaActual.includes('estudiantes.html')) {
         }
     }
 
-    // ---------------------------------------------------------------------
     // FUNCIÓN AUXILIAR: MOSTRAR MENSAJES DE ESTADO
-    // ---------------------------------------------------------------------
     /**
      * Muestra alertas de Bootstrap en la esquina superior derecha
      * @param {string} mensaje - Texto a mostrar
@@ -209,9 +183,7 @@ if (paginaActual.includes('estudiantes.html')) {
     }
 }
 
-// =============================================================================
 // MÓDULO 2: CURSOS
-// =============================================================================
 // Este código SOLO se ejecuta si estamos en la página cursos.html
 
 if (paginaActual.includes('cursos.html')) {
@@ -344,9 +316,7 @@ if (paginaActual.includes('cursos.html')) {
     }
 }
 
-// =============================================================================
 // MÓDULO 3: PROFESORES
-// =============================================================================
 // Este código SOLO se ejecuta si estamos en la página profesores.html
 
 if (paginaActual.includes('profesores.html')) {
