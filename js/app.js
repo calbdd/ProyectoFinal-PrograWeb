@@ -416,7 +416,7 @@ if (paginaActual.includes('profesores.html')) {
         console.log("🗑️ Eliminando profesor ID:", id)
 
         const { error } = await supabase
-            .from("Profesores")
+            .from("profesores")
             .delete()
             .eq("id", id)
 
