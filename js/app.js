@@ -55,7 +55,7 @@ if (paginaActual.includes('estudiantes.html')) {
         const carrera = inputCarrera.value.trim()
 
         // Llamar a la función que inserta en Supabase
-        await crearEstudiante(id, nombre, correo, carrera)
+        await crearEstudiante(id, nombre, email, carrera)
         
         // Limpiar el formulario después de guardar
         formEstudiante.reset()
@@ -71,7 +71,7 @@ if (paginaActual.includes('estudiantes.html')) {
         // Consultar tabla "Estudiantes" en Supabase
         // .select("*") = SELECT * FROM Estudiantes (en SQL)
         const { data: estudiantes, error } = await supabase
-            .from("Estudiantes")
+            .from("estudiantes")
             .select("*")
             .order('id_estudiante', { ascending: true })
 
@@ -95,7 +95,7 @@ if (paginaActual.includes('estudiantes.html')) {
                 fila.innerHTML = `
                     <td>${est.id_estudiante}</td>
                     <td>${est.nombre}</td>
-                    <td>${est.correo}</td>
+                    <td>${est.email}</td>
                     <td>${est.carrera}</td>
                     <td>
                         <button class="btn btn-sm btn-danger btn-eliminar" data-id="${est.id}">
@@ -135,7 +135,7 @@ if (paginaActual.includes('estudiantes.html')) {
      * @param {string} correo - Correo electrónico
      * @param {string} carrera - Carrera del estudiante
      */
-    async function crearEstudiante(id_estudiante, nombre, correo, carrera) {
+    async function crearEstudiante(id_estudiante, nombre, email, carrera) {
         // Crear objeto con los datos del estudiante
         const estudiante = { id_estudiante, nombre, correo, carrera }
         
@@ -144,7 +144,7 @@ if (paginaActual.includes('estudiantes.html')) {
         // Insertar en Supabase
         // .insert([estudiante]) = INSERT INTO Estudiantes VALUES (...) (en SQL)
         const { error } = await supabase
-            .from("Estudiantes")
+            .from("estudiantes")
             .insert([estudiante])
 
         // Manejar resultado
@@ -174,7 +174,7 @@ if (paginaActual.includes('estudiantes.html')) {
         // Eliminar de Supabase
         // .delete().eq("id", id) = DELETE FROM Estudiantes WHERE id = id (en SQL)
         const { error } = await supabase
-            .from("Estudiantes")
+            .from("estudiantes")
             .delete()
             .eq("id", id)
 
@@ -244,7 +244,7 @@ if (paginaActual.includes('cursos.html')) {
     // Función: Cargar cursos
     async function cargarCursos() {
         const { data: cursos, error } = await supabase
-            .from("Cursos")
+            .from("cursos")
             .select("*")
             .order('codigo_curso', { ascending: true })
 
@@ -298,7 +298,7 @@ if (paginaActual.includes('cursos.html')) {
         console.log("📝 Creando curso:", curso)
 
         const { error } = await supabase
-            .from("Cursos")
+            .from("cursos")
             .insert([curso])
 
         if (error) {
@@ -318,7 +318,7 @@ if (paginaActual.includes('cursos.html')) {
         console.log("🗑️ Eliminando curso ID:", id)
 
         const { error } = await supabase
-            .from("Cursos")
+            .from("cursos")
             .delete()
             .eq("id", id)
 
@@ -379,7 +379,7 @@ if (paginaActual.includes('profesores.html')) {
     // Función: Cargar profesores
     async function cargarProfesores() {
         const { data: profesores, error } = await supabase
-            .from("Profesores")
+            .from("profesores")
             .select("*")
             .order('id_profesor', { ascending: true })
 
@@ -398,7 +398,7 @@ if (paginaActual.includes('profesores.html')) {
                 fila.innerHTML = `
                     <td>${prof.id_profesor}</td>
                     <td>${prof.nombre}</td>
-                    <td>${prof.correo}</td>
+                    <td>${prof.email}</td>
                     <td>${prof.departamento}</td>
                     <td>
                         <button class="btn btn-sm btn-danger btn-eliminar" data-id="${prof.id}">
@@ -427,13 +427,13 @@ if (paginaActual.includes('profesores.html')) {
     }
 
     // Función: Crear profesor
-    async function crearProfesor(id_profesor, nombre, correo, departamento) {
+    async function crearProfesor(id_profesor, nombre, email, departamento) {
         const profesor = { id_profesor, nombre, correo, departamento }
         
         console.log("📝 Creando profesor:", profesor)
 
         const { error } = await supabase
-            .from("Profesores")
+            .from("profesores")
             .insert([profesor])
 
         if (error) {
@@ -478,36 +478,3 @@ if (paginaActual.includes('profesores.html')) {
         setTimeout(() => { statusDiv.innerHTML = "" }, 3000)
     }
 }
-
-// =============================================================================
-// NOTAS PARA EL PROFESOR
-// =============================================================================
-/*
-ARQUITECTURA DEL CÓDIGO:
-------------------------
-Este archivo maneja las 3 secciones principales del sistema:
-1. Estudiantes (líneas 20-180)
-2. Cursos (líneas 182-340)
-3. Profesores (líneas 342-500)
-
-Cada sección tiene las mismas operaciones CRUD:
-- CREATE: Insertar nuevos registros con .insert()
-- READ: Consultar datos con .select()
-- DELETE: Eliminar registros con .delete()
-
-La estructura es modular: cada módulo se ejecuta solo cuando está en su página.
-
-TECNOLOGÍAS UTILIZADAS:
------------------------
-- JavaScript ES6+ (async/await, arrow functions, template literals)
-- Supabase SDK (para operaciones de base de datos)
-- DOM Manipulation (para actualizar la interfaz)
-- Event Listeners (para capturar acciones del usuario)
-
-FLUJO DE DATOS:
----------------
-Usuario → Formulario HTML → JavaScript captura datos → 
-Supabase guarda en BD → JavaScript recarga tabla → Usuario ve cambios
-
-Similar al Lab08 pero escalado a 3 tablas y con mejor manejo de errores.
-*/
