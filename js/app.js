@@ -232,12 +232,12 @@ if (paginaActual.includes('cursos.html')) {
     formCurso.addEventListener("submit", async (e) => {
         e.preventDefault()
         
-        const codigo = inputCodigo.value.trim()
+        const codigo_curso = inputCodigo.value.trim()
         const nombre = inputNombre.value.trim()
         const creditos = parseInt(inputCreditos.value.trim())
         const horario = inputHorario.value.trim()
 
-        await crearCurso(codigo, nombre, creditos, horario)
+        await crearCurso(codigo_curso, nombre, creditos, horario)
         formCurso.reset()
     })
 
