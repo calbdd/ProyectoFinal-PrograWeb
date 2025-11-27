@@ -106,16 +106,9 @@ if (paginaActual.includes('estudiantes.html')) {
     }
 
     // FUNCIÓN: CREAR ESTUDIANTE (CREATE)
-    /**
-     * Inserta un nuevo estudiante en la base de datos
-     * @param {string} id_estudiante - ID del estudiante (ej: "2021001")
-     * @param {string} nombre - Nombre completo
-     * @param {string} correo - Correo electrónico
-     * @param {string} carrera - Carrera del estudiante
-     */
     async function crearEstudiante(id_estudiante, nombre, email, carrera) {
         // Crear objeto con los datos del estudiante
-        const estudiante = { id_estudiante, nombre, correo, carrera }
+        const estudiante = { id_estudiante, nombre, email, carrera }
         
         console.log("📝 Intentando crear estudiante:", estudiante)
 
@@ -398,7 +391,7 @@ if (paginaActual.includes('profesores.html')) {
 
     // Función: Crear profesor
     async function crearProfesor(id_profesor, nombre, email, departamento) {
-        const profesor = { id_profesor, nombre, correo, departamento }
+        const profesor = { id_profesor, nombre, email, departamento }
         
         console.log("📝 Creando profesor:", profesor)
 
