@@ -2,7 +2,7 @@
 import { supabase } from "./supabaseClient.js"
 
 // DETECTAR EN QUÉ PÁGINA ESTAMOS
-// Obtenemos la ruta de la página actual (ejemplo: "/paginas/estudiantes.html")
+// Se obtiene la ruta de la página actual (ejemplo: "/paginas/estudiantes.html")
 const paginaActual = window.location.pathname
 
 // MÓDULO 1: ESTUDIANTES
@@ -36,7 +36,7 @@ if (paginaActual.includes('estudiantes.html')) {
         const carrera = inputCarrera.value.trim()
 
         // Llamar a la función que inserta en Supabase
-        await crearEstudiante(id, nombre, email, carrera)
+        await crearEstudiante(id, nombre, correo, carrera)
         
         // Limpiar el formulario después de guardar
         formEstudiante.reset()
@@ -106,9 +106,9 @@ if (paginaActual.includes('estudiantes.html')) {
     }
 
     // FUNCIÓN: CREAR ESTUDIANTE (CREATE)
-    async function crearEstudiante(id_estudiante, nombre, email, carrera) {
+    async function crearEstudiante(id_estudiante, nombre, correo, carrera) {
         // Crear objeto con los datos del estudiante
-        const estudiante = { id_estudiante, nombre, email, carrera }
+        const estudiante = { id_estudiante, nombre, email: correo, carrera }
         
         console.log("📝 Intentando crear estudiante:", estudiante)
 
@@ -185,8 +185,8 @@ if (paginaActual.includes('cursos.html')) {
     const formCurso = document.getElementById("form-curso")
     const inputCodigo = document.getElementById("codigo_curso")
     const inputNombre = document.getElementById("nombre_curso")
-    const inputCreditos = document.getElementById("creditos_curso")
-    const inputHorario = document.getElementById("horario_curso")
+    const inputCreditos = document.getElementById("creditos")
+    const inputHorario = document.getElementById("horario")
     const tablaCursos = document.querySelector("#tabla-cursos tbody")
     const statusDiv = document.getElementById("status")
 
