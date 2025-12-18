@@ -1,7 +1,7 @@
 
 import { supabase } from "./supabaseClient.js"
 
-// DETECTAR EN QUÉ PÁGINA ESTAMOS
+// Detectar en que pagina se encuentra el usuario
 // Se obtiene la ruta de la página actual (ejemplo: "/paginas/estudiantes.html")
 const paginaActual = window.location.pathname
 
@@ -10,7 +10,7 @@ const paginaActual = window.location.pathname
 
 if (paginaActual.includes('estudiantes.html')) {
     
-    // 1.1 OBTENER ELEMENTOS DEL DOM (Document Object Model)
+    // OBTENER ELEMENTOS DEL DOM (Document Object Model)
     // Guardamos referencias a los elementos HTML que vamos a manipular
     
     const formEstudiante = document.getElementById("form-estudiante")
@@ -20,11 +20,14 @@ if (paginaActual.includes('estudiantes.html')) {
     const inputCarrera = document.getElementById("carrera_estudiante")
     const tablaEstudiantes = document.querySelector("#tabla-estudiantes tbody")
     const statusDiv = document.getElementById("status")
+    const btnSubmit = formEstudiante.querySelector('button[type="submit"]')
 
-    // 1.2 CARGAR ESTUDIANTES AL INICIAR LA PÁGINA
+    let editandoId = null // Variable para rastrear si estamos editando
+
+    // CARGAR ESTUDIANTES AL INICIAR LA PÁGINA
     cargarEstudiantes()
 
-    // 1.3 EVENTO: ENVIAR FORMULARIO (CREAR ESTUDIANTE)
+    // EVENTO: ENVIAR FORMULARIO (CREAR ESTUDIANTE)
     formEstudiante.addEventListener("submit", async (e) => {
         // Prevenir que el formulario recargue la página (comportamiento por defecto)
         e.preventDefault()
@@ -34,12 +37,24 @@ if (paginaActual.includes('estudiantes.html')) {
         const nombre = inputNombre.value.trim()
         const correo = inputCorreo.value.trim()
         const carrera = inputCarrera.value.trim()
-
-        // Llamar a la función que inserta en Supabase
-        await crearEstudiante(id, nombre, correo, carrera)
         
+        if(editandoId)
+        {
+            await atualizarEstudiante(editandoId, id, nombre, correo, carrera);
+            editandoId = null
+            btnSubmit.innerHTML = '<i class="fas fa-save"></i> Agregar Estudiante'
+            btnSubmit.classList.remove('btn-warning')
+            btnSubmit.classList.add('btn-primary')
+        }
+        else
+        {
+            // Llamar a la función que inserta en Supabase
+            await crearEstudiante(id, nombre, correo, carrera)
+        }
+            
         // Limpiar el formulario después de guardar
         formEstudiante.reset()
+        inputId.disabled = false
     })
 
     // FUNCIÓN: CARGAR ESTUDIANTES (READ)
@@ -78,6 +93,9 @@ if (paginaActual.includes('estudiantes.html')) {
                     <td>${est.email}</td>
                     <td>${est.carrera}</td>
                     <td>
+                        <button class="btn btn-sm btn-warning btn-editar me-1" data-id="${est.id}">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
                         <button class="btn btn-sm btn-danger btn-eliminar" data-id="${est.id}">
                             <i class="fas fa-trash"></i> Eliminar
                         </button>
@@ -85,7 +103,13 @@ if (paginaActual.includes('estudiantes.html')) {
                 `
                 tablaEstudiantes.appendChild(fila)
             })
-
+            //Eventos de editar
+            document.querySelectorAll('.btn-editar').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const id = e.target.closest('button').getAttribute('data-id')
+                    await cargarEstudianteParaEditar(id)
+                })
+            })
             // Agregar eventos a los botones de eliminar
             document.querySelectorAll('.btn-eliminar').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
@@ -125,6 +149,60 @@ if (paginaActual.includes('estudiantes.html')) {
         } else {
             console.log("✅ Estudiante creado exitosamente")
             mostrarStatus("✅ Estudiante creado exitosamente", "success")
+            await cargarEstudiantes() // Recargar la tabla
+        }
+    }
+
+    // FUNCIÓN: EDITAR ESTUDIANTE (UPDATE)
+    async function cargarEstudianteParaEditar(id) {
+        const {data: estudiante, error} = await supabase
+            .from("estudiantes")
+            .select("*")
+            .eq("id", id)
+            .single()
+
+        if (error) {
+            console.error("❌ Error al cargar estudiante para editar:", error)
+            mostrarStatus("Error: " + error.message, "danger")
+            return
+        }
+        // Rellenar el formulario con los datos del estudiante
+        inputId.value = estudiante.id_estudiante
+        inputNombre.value = estudiante.nombre
+        inputCorreo.value = estudiante.email
+        inputCarrera.value = estudiante.carrera
+
+        //Deshabilitar el campo id_estudiante
+        inputId.disabled = true
+
+        editandoId = id
+
+        //Cambiar el estado del botón a "Actualizar"
+        btnSubmit.innerHTML = '<i class="fas fa-save"></i> Actualizar Estudiante'
+        btnSubmit.classList.remove('btn-primary')
+        btnSubmit.classList.add('btn-warning')
+
+        //Scroll hacia el formulario
+        formEstudiante.scrollIntoView({behavior: "smooth", block: 'start'})
+        mostrarStatus("✏️ Editando estudiante ID: " + estudiante.id_estudiante, "warning")
+    }
+
+    async function atualizarEstudiante(id, id_estudiante, nombre, correo, carrera) {
+        const estudianteActualizado = { id_estudiante, nombre, email: correo, carrera }
+
+        console.log("📝 Actualizando estudiante ID:", estudianteActualizado)
+
+        const { error } = await supabase
+            .from("estudiantes")
+            .update(estudianteActualizado)
+            .eq("id", id)
+
+        if (error) {
+            console.error("❌ Error al actualizar estudiante:", error)
+            mostrarStatus("Error: " + error.message, "danger")
+        } else {
+            console.log("✅ Estudiante actualizado")
+            mostrarStatus("✏️ Estudiante actualizado exitosamente", "success")
             await cargarEstudiantes() // Recargar la tabla
         }
     }
@@ -189,6 +267,10 @@ if (paginaActual.includes('cursos.html')) {
     const inputHorario = document.getElementById("horario")
     const tablaCursos = document.querySelector("#tabla-cursos tbody")
     const statusDiv = document.getElementById("status")
+    const btnSubmit = formCurso.querySelector('button[type="submit"]')
+
+    let editandoId = null // Variable para rastrear si estamos editando
+
 
     // Cargar cursos al iniciar
     cargarCursos()
@@ -201,9 +283,19 @@ if (paginaActual.includes('cursos.html')) {
         const nombre = inputNombre.value.trim()
         const creditos = parseInt(inputCreditos.value.trim())
         const horario = inputHorario.value.trim()
+        //Verificar si estamos editando
+        if (editandoId) {
+            await actualizarCurso(editandoId, codigo_curso, nombre, creditos, horario)
+            editandoId = null
+            btnSubmit.innerHTML = '<i class="fas fa-save"></i> Agregar Curso'
+            btnSubmit.classList.remove('btn-warning')
+            btnSubmit.classList.add('btn-primary')
+        } else {
+            await crearCurso(codigo_curso, nombre, creditos, horario)
+        }
 
-        await crearCurso(codigo_curso, nombre, creditos, horario)
         formCurso.reset()
+        inputCodigo.disabled = false
     })
 
     // Función: Cargar cursos
@@ -231,6 +323,9 @@ if (paginaActual.includes('cursos.html')) {
                     <td>${curso.creditos}</td>
                     <td>${curso.horario}</td>
                     <td>
+                        <button class="btn btn-sm btn-warning btn-editar me-1" data-id="${curso.id}">
+                            <i class="fas fa-edit"></i> Editar 
+                        </button>
                         <button class="btn btn-sm btn-danger btn-eliminar" data-id="${curso.id}">
                             <i class="fas fa-trash"></i> Eliminar
                         </button>
@@ -238,7 +333,15 @@ if (paginaActual.includes('cursos.html')) {
                 `
                 tablaCursos.appendChild(fila)
             })
+            //Agregar eventos de editar a los botones
+            document.querySelectorAll('.btn-editar').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const id = e.target.closest('button').getAttribute('data-id')
+                    await cargarCursosParaEditar(id)
+                })
+            })
 
+            // Agregar eventos a los botones de eliminar
             document.querySelectorAll('.btn-eliminar').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     const id = e.target.closest('button').getAttribute('data-id')
@@ -272,6 +375,58 @@ if (paginaActual.includes('cursos.html')) {
         } else {
             console.log("✅ Curso creado")
             mostrarStatus("✅ Curso creado exitosamente", "success")
+            await cargarCursos()
+        }
+    }
+
+    // Función: Cargar curso para editar
+    async function cargarCursosParaEditar(id) {
+        const {data: curso, error} = await supabase
+            .from("cursos")
+            .select("*")
+            .eq("id", id)
+            .single()
+        if (error) {
+            console.error("❌ Error al cargar curso para editar:", error)
+            mostrarStatus("Error: " + error.message, "danger")
+            return
+        }
+
+        inputCodigo.value = curso.codigo_curso
+        inputNombre.value = curso.nombre
+        inputCreditos.value = curso.creditos
+        inputHorario.value = curso.horario
+
+        //Deshabilitar el campo codigo_curso
+        inputCodigo.disabled = true
+        editandoId = id
+        //Cambiar el estado del botón a "Actualizar"
+        btnSubmit.innerHTML = '<i class="fas fa-save"></i> Actualizar Curso'
+        btnSubmit.classList.remove('btn-primary')
+        btnSubmit.classList.add('btn-warning')
+
+        //Scroll hacia el formulario
+        formCurso.scrollIntoView({behavior: "smooth", block: 'start'})
+        mostrarStatus("✏️ Editando curso Código: " + curso.codigo_curso, "warning")
+    }
+
+    // Función: Actualizar curso
+    async function actualizarCurso(id, codigo_curso, nombre, creditos, horario) {
+        const cursoActualizado = { codigo_curso, nombre, creditos, horario }
+
+        console.log("📝 Actualizando curso ID:", cursoActualizado)
+
+        const { error } = await supabase
+            .from("cursos")
+            .update(cursoActualizado)
+            .eq("id", id)
+
+        if (error) {
+            console.error("❌ Error al actualizar curso:", error)
+            mostrarStatus("Error: " + error.message, "danger")
+        } else {
+            console.log("✅ Curso actualizado")
+            mostrarStatus("✅ Curso actualizado exitosamente", "success")
             await cargarCursos()
         }
     }
@@ -322,6 +477,10 @@ if (paginaActual.includes('profesores.html')) {
     const inputDepartamento = document.getElementById("departamento_profesor")
     const tablaProfesores = document.querySelector("#tabla-profesores tbody")
     const statusDiv = document.getElementById("status")
+    const btnSubmit = formProfesor.querySelector('button[type="submit"]')
+
+
+    let editandoId = null // Variable para rastrear si estamos editando    
 
     // Cargar profesores al iniciar
     cargarProfesores()
@@ -335,8 +494,21 @@ if (paginaActual.includes('profesores.html')) {
         const correo = inputCorreo.value.trim()
         const departamento = inputDepartamento.value.trim()
 
-        await crearProfesor(id_profesor, nombre, correo, departamento)
+        if(editandoId)
+            {
+                await actualizarProfesor(editandoId, id_profesor, nombre, correo, departamento);
+                editandoId = null
+                btnSubmit.innerHTML = '<i class="fas fa-save"></i> Agregar Profesor'
+                btnSubmit.classList.remove('btn-warning')
+                btnSubmit.classList.add('btn-primary')
+            }
+        else
+            {
+             await crearProfesor(id_profesor, nombre, correo, departamento)
+            }
+
         formProfesor.reset()
+        inputId.disabled = false
     })
 
     // Función: Cargar profesores
@@ -364,6 +536,9 @@ if (paginaActual.includes('profesores.html')) {
                     <td>${prof.email}</td>
                     <td>${prof.departamento}</td>
                     <td>
+                        <button class="btn btn-sm btn-warning btn-editar me-1" data-id="${prof.id}">
+                            <i class="fas fa-edit"></i> Editar 
+                        </button>
                         <button class="btn btn-sm btn-danger btn-eliminar" data-id="${prof.id}">
                             <i class="fas fa-trash"></i> Eliminar
                         </button>
@@ -371,7 +546,16 @@ if (paginaActual.includes('profesores.html')) {
                 `
                 tablaProfesores.appendChild(fila)
             })
+            //Agregar eventos de editar a los botones
+            document.querySelectorAll('.btn-editar').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const id = e.target.closest('button').getAttribute('data-id')
+                    await cargarProfesoresParaEditar(id)
+                })
+            })
 
+
+            // Agregar eventos a los botones de eliminar
             document.querySelectorAll('.btn-eliminar').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     const id = e.target.closest('button').getAttribute('data-id')
@@ -408,6 +592,59 @@ if (paginaActual.includes('profesores.html')) {
             await cargarProfesores()
         }
     }
+
+    // Función: Cargar profesor para editar
+    async function cargarProfesoresParaEditar(id) {
+        const {data: profesor, error} = await supabase
+            .from("profesores")
+            .select("*")
+            .eq("id", id)
+            .single()
+        if (error) {
+            console.error("❌ Error al cargar profesor para editar:", error)
+            mostrarStatus("Error: " + error.message, "danger")
+            return
+        }
+        // Rellenar el formulario con los datos del profesor
+        inputId.value = profesor.id_profesor
+        inputNombre.value = profesor.nombre
+        inputCorreo.value = profesor.email
+        inputDepartamento.value = profesor.departamento
+
+        //Deshabilitar el campo id_profesor
+        inputId.disabled = true
+        editandoId = id
+        //Cambiar el estado del botón a "Actualizar"
+        btnSubmit.innerHTML = '<i class="fas fa-save"></i> Actualizar Profesor'
+        btnSubmit.classList.remove('btn-primary')
+        btnSubmit.classList.add('btn-warning')
+
+        //Scroll hacia el formulario
+        formProfesor.scrollIntoView({behavior: "smooth", block: 'start'})
+        mostrarStatus("✏️ Editando profesor ID: " + profesor.id_profesor, "warning")
+    }
+
+    // Función: Actualizar profesor
+    async function actualizarProfesor(id, id_profesor, nombre, email , departamento) {
+        const profesorActualizado = { id_profesor, nombre, email, departamento }
+
+        console.log("📝 Actualizando profesor ID:", profesorActualizado)
+
+        const { error } = await supabase
+            .from("profesores")
+            .update(profesorActualizado)
+            .eq("id", id)
+        
+        if (error) {
+            console.error("❌ Error al actualizar profesor:", error)
+            mostrarStatus("Error: " + error.message, "danger")
+        } else {
+            console.log("✅ Profesor actualizado")
+            mostrarStatus("✅ Profesor actualizado exitosamente", "success")
+            await cargarProfesores()
+        }
+    }   
+
 
     // Función: Eliminar profesor
     async function eliminarProfesor(id) {
