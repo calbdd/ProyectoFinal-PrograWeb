@@ -1,0 +1,42 @@
+classDiagram
+    class Estudiante {
+        int id
+        string nombre
+        string apellido
+        string correo
+        string carrera
+    }
+
+    class Profesor {
+        int id
+        string nombre
+        string apellido
+        string correo
+        string departamento
+    }
+
+    class Curso {
+        int id
+        string nombre
+        string codigo
+        int creditos
+    }
+
+    %% Relaciones del sistema
+    Profesor "1" -- "0..*" Curso : imparte
+    Estudiante "0..*" -- "0..*" Curso : matricula
+    Curso "1" -- "0..*" Estudiante : tiene
+    Curso "1" -- "1" Profesor : es impartido por
+    Estudiante "1" -- "0..*" Profesor : consulta
+    Profesor "1" -- "0..*" Estudiante : asesora
+    Curso "1" -- "0..*" Curso : prerequisito
+    Estudiante "1" -- "0..*" Estudiante : colabora con
+    Profesor "1" -- "0..*" Profesor : colabora con
+    Curso "1" -- "0..*" Curso : relacionado con
+    Estudiante "1" -- "0..*" Curso : completa
+    Profesor "1" -- "0..*" Curso : coordina
+    Curso "1" -- "0..*" Profesor : supervisa
+    Estudiante "1" -- "0..*" Profesor : evalua
+    Profesor "1" -- "0..*" Estudiante : tutoriza
+    Curso "1" -- "0..*" Estudiante : inscribe
+    Estudiante "1" -- "0..*" Curso : asiste a
